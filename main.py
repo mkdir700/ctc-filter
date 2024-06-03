@@ -137,6 +137,7 @@ def is_golden_cross_macd(
     # 计算 MACD
     assert hasattr(ta, "MACD"), "MACD not found in talib"
     dif, dea, macd = ta.MACD(df["close"], fastperiod=12, slowperiod=26, signalperiod=9)  # type: ignore
+    print(dif, dea)
     # NOTE: 交易所中的 macd 的数值都是 * 2 之后的结果
     macd = macd * 2
     # 出现一次 dif < dea, 这根 K 线之后出现 dif > dea
@@ -292,7 +293,7 @@ def is_kdj_bullish(
         slowd_matype=0,
     )  # type: ignore
 
-        # 出现一次 dif < dea, 这根 K 线之后出现 dif > dea
+    # 出现一次 dif < dea, 这根 K 线之后出现 dif > dea
     k_lt_d = False
     k_lt_d_index = 0
     for i in range(len(kdj_k) - 1, len(kdj_k) - n - 1, -1):
@@ -356,7 +357,7 @@ if __name__ == "__main__":
     with open("swap_tickers.json", "r") as f:
         data = json.load(f)
 
-    # instId = "APE-USDT-SWAP"
+    # instId = "TURBO-USDT-SWAP"
     # df = get_candlesticks(instId)
     # if strategy1(instId, default_df=df):
     #     print(f"{instId} is bullish")

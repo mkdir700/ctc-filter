@@ -1,5 +1,8 @@
 import pandas as pd
 import talib as ta
+from typing_extensions import override
+
+from ctc_filter.filter import Filter
 
 
 def is_kdj_bullish(df: pd.DataFrame, n: int = 1) -> bool:
@@ -162,16 +165,17 @@ def is_golden_cross_macd(
     return False
 
 
-class SampleRule:
-    def __init__(self, df: pd.DataFrame):
-        self.df = df
+class SampleFilter(Filter):
+    name = "Sample Filter"
+    description = """
+    需要同时满足以下条件：
+    1. n 根 K 线内部存在 macd 金叉信号
+    2. n 根 K 线内部中轨在 K 线内部
+    3. n 根 K 线内部存在 KDJ 看涨信号
+    """
 
-    def run(self) -> bool:
-        """运行规则
-
-        Returns:
-            bool: 是否满足规则
-        """
+    @override
+    def filter(self) -> bool:
         n = 5
         cond1 = is_golden_cross_macd(self.df, n)
         cond2 = middleband_inside_candle(self.df, n)
